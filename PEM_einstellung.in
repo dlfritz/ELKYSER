@@ -1,0 +1,81 @@
+
+Data Output File Name:
+Kickoff1.dat
+
+Resolution
+10000
+
+Initial Concentrations  Water		Hydrogen	Oxygen
+			0.94D0		0.0666D0	0.0322D0	
+
+Current Density [A/cm^2]
+10.D0
+
+Cathode Temp. [K]	Anode Temp. [k]		Cell Temp. [K]
+356.D0			353.D0			350.D0
+
+Cathode Press. [MPa]	Anode Press. [MPa]	Standard Press [MPa]
+3.5D0			3.5D-1			1.01325D-1
+
+Trans. Coeff. A		Trans. Coeff. C		
+2.D0			0.5D0			
+
+Exc. Current Density Cat [A/cm^2]	Exc. Current Density An [A/cm^2]
+1.D-3					1.D-10
+
+Lamda (H2O uptake) 	Water Activity (1 for liquid)	Equiv. Mol. Weight	 
+20.5D0			1.D0				1100
+
+Dry Mem. Den. [kg/m^3]	Liquid Water Dipole [D]	Dimensionality [1,2,3]
+2002.D0			2.95			6
+
+SP3 Orbital Angle (THEF)	SO Radius (m)
+0.1575D0			0.244D-9
+
+Number of Channels Anode	Number of channels Cathode
+11				11
+
+Anode Channel Width [m]		Anode Channel Height [m]	Anode Land Width [m]	
+0.001D0				0.001D-11				0.001D0
+
+Cell width [m]			Anode Electrode Height [m]	Anode Bipolar plate backing thickness [m]
+0.023D0				0.000254D0			0.0005D0
+
+Cathode Channel Width [m]	Cathode Channel Height [m]	Cathode Land Width [m]	
+0.0001D0			0.001D-11			0.001D0			
+
+Cell width [m]			Cathode Electrode Height[m]	Cathode Bipolar plate backing thickness [m]	
+0.023D0				0.000254D0			0.0001D0					
+
+MEA Length [m]			Cell Area [m^2]			Membrane Thickness
+0.023D0				0.01D0				25.4D-6
+
+Anode Elec Res. [Ohm-m]		Anode Bipolar Res. [Ohm-m]	
+5.53D-3				7.4D-3				
+
+Cathode Elec Res. [Ohm-m]	Cathode bipolar Res. [Ohm-m]
+5.53D-3				7.4D-3
+
+Elec.-osmotic drac coeff.	Darcy coeff [m^2]	Water diffusion membrane	
+7.D0				1.58D-18		1.28D-10			
+
+Anode porosity		Cathode porosity	
+0.3D0			0.3D0			
+
+Anode percolation threshold	Cathode percolation threshold
+0.11D0				0.11D0
+
+Water Viscosity [Pa-s]	
+1.1D-3
+
+Water Mole Weight[g/mol]	Hydrogen Mole Weight [g/mol]	Oxygen Mole Weight [g/mol] 	
+18.06D0				2.01D0				32.02D0				
+
+Diffusion Coefficient [a]		Diffusion Coefficient [b]
+3.64D-4					2.334D0
+
+Critical Temperature:   Water		Hydrogen	Oxygen	
+			647.3D0		33.2D0		154.58D0
+
+Critical Pressure: 	Water		Hydrogen	Oxygen
+			22.03D0		1.3D0		5.043D0	
