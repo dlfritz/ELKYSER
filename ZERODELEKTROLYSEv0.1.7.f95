@@ -226,7 +226,7 @@
       !#                                                                #
       !# RHO(i) -> Density of water [kg/m^3]                            #
       !#                i=1 -> Anode side                               #
-      !9#                i=2 -> Cathode side                             #
+      !#                i=2 -> Cathode side                             #
       !#                                                                #
       !# MU     -> Viscosity of water                                   #
       !#                                                                #  
@@ -1039,7 +1039,6 @@
       DGH=((((LG)**2*(MUW)*QE)/(192.D0*PI**2*ETA*EPSR*EPS0* &
           (GASC)**3*(DELTA)**2)))/(DLOG(DTAN(THEI/2.D0)/ &
           DTAN(THEF/2.D0)))
-          PRINT*,DGH
       !
       !
       END SUBROUTINE PROT
