@@ -284,8 +284,8 @@
       INTEGER, ALLOCATABLE :: N(:)
       DOUBLE PRECISION :: TK,TA,TZ,PK,PA,P0,DGS,DG,OCV,AA,AK,CD0A, &
                           CD0K,LAM,SIGM,CD,CUR,CSTP,ZCD,ND,KD,DW, &
-                          MU,E,HI,SI,WA,EW,RHOI,SIGA,MUW,KAPPA,THEF, &
-                          RADF
+                          MU,E,HI,SI,EW,RHOI,SIGA,MUW,KAPPA,THEF, &
+                          RADF,ACT
       DOUBLE PRECISION, ALLOCATABLE :: AJ(:),BJ(:),CJ(:),DJ(:),TG(:), &
 				       H(:),S(:),C(:,:,:),Y(:,:,:), &
 				       ETA(:,:),D(:,:),R(:,:),MR(:,:), &
@@ -372,7 +372,7 @@
       ! Membrane Parameters
       READ(10,*)
       READ(10,*)
-      READ(10,*) LAM,WA,EW
+      READ(10,*) ACT,EW
       !
       READ(10,*)
       READ(10,*)
@@ -508,11 +508,14 @@
       ! ENTHALPY
 	CALL ENTHALPY(TG(I),AJ(I),BJ(I),CJ(I),DJ(I),HI)
         H(I)=HI
+      !
       ! ENTROPY
 	CALL ENTROPY(TG(I),P0,AJ(I),BJ(I),CJ(I),DJ(I),RGC,SI)
 	S(I)=SI
-      !
       END DO
+      !
+      ! Calculate Membrane Hydration
+      CALL LAMDA(ACT,LAM)
       !
       ! Gibb's free energy
       DGS=(H(2)+0.5D0*H(3)-H(1))-TZ*(S(2)+0.5D0*S(3)-S(1))
@@ -589,7 +592,8 @@
              (((R(2,2)+R(5,2))/2.D0)+((R(10,2)/N(2))+R(6,2)))
       !
       ! Membrane proton transport resistance
-      CALL PTRANS(TZ,LAM,SIGM)
+      !CALL PTRANS(TZ,LAM,SIGM)
+      CALL PROT(RGC,EW,LAM,TZ,M,RHOI,MUW,KAPPA,THEF,RADF,ACT,SIGM)
       !
       !##################################################################
       !#                                                                #
@@ -602,6 +606,9 @@
       !
       ! Density of water cathode side
       CALL RHOW(TK,RHO(2))
+      !
+      ! Viscosity of Water
+      CALL VISCOS(TZ,MU)
       !
       ! Hydrostatic pressure flows
       MFR(4,1)=KD*((D(8,2)*RHO(1))/(MU*M(1)))
@@ -741,7 +748,7 @@
       CLOSE(20)
       END DO
       !
-      CALL PROT(RGC,WA,EW,LAM,TZ,M,RHOI,MUW,KAPPA,THEF,SIGM)
+
       !
       !
       CALL SYSTEM('mv *.dat Data')
@@ -750,6 +757,32 @@
       END PROGRAM ZERODELEKTROLYSE
       !
       !
+      !
+      !##################################################################
+      !#								#
+      !#		SUBROUTINE LAMDA				#
+      !#								#
+      !#================================================================#
+      !# Empirical formulation taken from Motupally et a.               #
+      !# (motupally2000a)                                               #
+      !#								#
+      !##################################################################
+      ! 
+      SUBROUTINE LAMDA(ACT,LAM)
+      !
+      IMPLICIT NONE
+      !
+      DOUBLE PRECISION :: ACT,LAM
+      !
+      IF ((ACT .LT. 0.999D0)) THEN 
+        LAM=0.043D0+17.81*ACT-39.85D0*ACT**2+36.D0*ACT**3
+      ELSE
+        LAM=21.D0
+      END IF
+      !
+      RETURN
+      !
+      END SUBROUTINE LAMDA
       !
       !##################################################################
       !#								#
@@ -883,6 +916,7 @@
       !
       SIGM=(0.005139D0*LAM-0.00326D0)*DEXP(1268.D0*((1.D0/ &
            303.D0)-(1.D0/TZ)))
+           PRINT*,"Empirical Sig: ",SIGM
       !
       END SUBROUTINE PTRANS
       !
@@ -931,7 +965,7 @@
       !#                                                                #
       !# GASC   -> Universal Gas Constant [J/mol-K]                     #
       !#                                                                #
-      !# WA     -> Water activity or relative humidity this value is 1  #
+      !# ACT     -> Water activity or relative humidity this value is 1 #
       !#           for liquid water. This parameter is imported from    #
       !#           the input variable file and can be altered to acc-   #
       !#           ount for the reduction in proton conductivity due    #
@@ -946,6 +980,8 @@
       !#	   initial condition. [K]				#
       !#                                                                #
       !# EPSI   -> Porosity of the solid polymer membrane [non-dim]     #
+      !#                                                                #
+      !# EPSR   -> Relative permittivity of the membrane [non-dim]      #
       !#                                                                #
       !# RHOI   -> Density of the dry membrane [kg/m^3]                 #
       !#                                                                #
@@ -979,23 +1015,36 @@
       !# LG     -> Distance between Oxygens in a proton hydrated mol-   #
       !#           ecule. [m]                                           #
       !#                                                                #
+      !# VCHEM  -> Number of chemical equilibrium steps in the overall  #
+      !#           chemical reaction. [non-dim]                         #
+      !#                                                                #
       !# DSUMH  -> The surface diffusion coefficient for proton         #
       !#           hopping [cm^2/s]                                     #
       !#                                                                #
-      !# DGH    -> Grotthus diffusion coefficient [cm^2/s]              #
+      !# DGH    -> Grotthus diffusion coefficient calculated in m^2/s   #
+      !#           then converted to cm^2/s by multiplying by 10000     #
+      !#           [cm^2/s]                                             #
+      !#                                                                #
+      !# DWH    ->  En masse diffusion coefficient of the hydronium     #
+      !#            ion through the application of the Stokes-Einstein  #
+      !#            equation. Converted from m^2/s to cm^2/s by the     #
+      !#            multiplication of 10000. [cm^2/s]                   #
       !#                                                                #
       !##################################################################
       !
-      SUBROUTINE PROT(GASC,WA,EW,LAM,TZ,M,RHOI,MUW,KAPPA,THEF,RADF,SIGM)
+      SUBROUTINE PROT(GASC,EW,LAM,TZ,M,RHOI,MUW,KAPPA,THEF,RADF, &
+                      ACT,SIGM)
       !
       IMPLICIT NONE
       !
-      DOUBLE PRECISION :: SIGM,GASC,WA,EW,LAM,TZ,EPSI,RHOI,TAU,M,RW, &
+      DOUBLE PRECISION :: SIGM,GASC,EW,LAM,TZ,EPSI,RHOI,TAU,M,RW, &
                           DELTA,MUW,EPSR,EPS0,QE,KAPPA,TAUC,ETA,VW, &
                           THEF,THEI,TAUGD,TMAX,DELTAC,KB,H,RADI,RADF, &
-                          LSUM,LG,DSUMH,DGH
+                          LSUM,LG,ACT,K1,K2,VCHEM,DSUMH,DGH,DWH,CSUMH,CH
       DOUBLE PRECISION, PARAMETER :: PI=4.D0*DATAN(1.D0)
+      DOUBLE PRECISION, PARAMETER :: F=96485.D0
 
+      ACT=1.D0-ACT
       !
       ! Constant Parameters             !Units
       RW=0.141D-9                       ![m]
@@ -1010,6 +1059,9 @@
       LSUM=0.255D-9                     ![m]
       RADI=0.143D-9                     ![m]
       LG=0.255D-9                       ![m]
+      K1=1000.D0                        ![non-dim]
+      K2=200.D0                         ![non-dim]
+      VCHEM=5.D0                        ![non-dim]
       !
       ! Membrane porosity [non-dimensional]
       EPSI=LAM/(LAM+((EW/(RHOI/1000.D0))/M))
@@ -1018,6 +1070,7 @@
       TAU=(2.D0*(1.D0-EPSI)+2.D0*EPSI*DLOG(EPSI)-0.5D0*EPSI* &
           (DLOG(EPSI))**2)/(EPSI*(1.D0-EPSI)+EPSI**2*DLOG(EPSI))
       !
+      ! Calculate Viscosity at temperature
       CALL VISCOS(TZ,ETA)     
       !
       ! Characteristic Time Step
@@ -1032,13 +1085,28 @@
       DELTAC=(DSQRT(2.D0)/LAM)*((EW/(RHOI/1000.D0))/M)**(2.D0/3.D0)
       !
       ! Surface Diffusion
-      DSUMH=((KB*TZ*LSUM**2)/(4*H))*DEXP(-((QE)**2/(4.D0*PI*EPS0*EPSR* &
-            KB*TZ))*(LSUM/((RADF+RADI+LSUM)*(RADF+RADI))))
+      DSUMH=((KB*TZ*LSUM**2)/(4.D0*H))*DEXP(-((QE)**2/(4.D0*PI*EPS0* &
+            EPSR*KB*TZ))*(LSUM/((RADF+RADI+LSUM)*(RADF+RADI))))*1.D4
       !
       ! Grotthuss Diffusion Coefficient
-      DGH=((((LG)**2*(MUW)*QE)/(192.D0*PI**2*ETA*EPSR*EPS0* &
-          (GASC)**3*(DELTA)**2)))/(DLOG(DTAN(THEI/2.D0)/ &
-          DTAN(THEF/2.D0)))
+      DGH=((((LG)**2*(MUW*3.336D-30)*QE)/(192.D0*PI**2*ETA*EPSR*EPS0* &
+          (RW)**3*(DELTA)**2)))/(DLOG(DTAN(THEI/2.D0)/ &
+          DTAN(THEF/2.D0)))*1.D4
+      !
+      ! En Masse Diffusion Coefficient
+      DWH=1.D4*(KB*TZ)/(6.D0*PI*ETA*RADI)
+      !
+      ! Concentration of surface protons
+      CSUMH=(1.D0/(LAM*VW))*((K1*ACT*(1.D0-ACT)*(1+K2*ACT))/((1.D0- &
+            ACT)*(1.D0+K1*ACT)+(1.D0+ACT**(VCHEM-1))*K1*K2*ACT**2))*1.D4
+      !
+      ! Concentration of bulk protons
+      CH=(1.D0/(LAM*VW))*(((1.D0-ACT**(VCHEM-2))*K1*K2*ACT**3)/((1.D0- &
+            ACT)*(1.D0+K1*ACT)+(1.D0+ACT**(VCHEM-1))*K1*K2*ACT**2))*1.D4
+      !
+      ! Proton transport through Nafion membrane
+      SIGM=(EPSI/TAU)*((F**2/(GASC*TZ))*(DSUMH*CSUMH+DGH*CH+(((DWH* &
+      CH)/(1.D0+DELTAC)))))
       !
       !
       END SUBROUTINE PROT

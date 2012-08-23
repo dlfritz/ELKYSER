@@ -1,18 +1,18 @@
 
 Data Output File Name:
-Kickoff1.dat
+TMLW.dat
 
 Resolution
 10000
 
 Initial Concentrations  Water		Hydrogen	Oxygen
-			0.94D0		0.0666D0	0.0322D0	
+			0.92D0		0.0866D0	0.0322D0	
 
 Current Density [A/cm^2]
 10.D0
 
 Cathode Temp. [K]	Anode Temp. [k]		Cell Temp. [K]
-356.D0			353.D0			350.D0
+306.D0			303.D0			300.D0
 
 Cathode Press. [MPa]	Anode Press. [MPa]	Standard Press [MPa]
 3.5D0			3.5D-1			1.01325D-1
@@ -21,16 +21,16 @@ Trans. Coeff. A		Trans. Coeff. C
 2.D0			0.5D0			
 
 Exc. Current Density Cat [A/cm^2]	Exc. Current Density An [A/cm^2]
-1.D-3					1.D-10
+1.D-5					1.D-8
 
-Lamda (H2O uptake) 	Water Activity (1 for liquid)	Equiv. Mol. Weight	 
-20.5D0			1.D0				1100
+Water Activity (1 for liquid)	Equiv. Mol. Weight	 
+0.9D0				900
 
 Dry Mem. Den. [kg/m^3]	Liquid Water Dipole [D]	Dimensionality [1,2,3]
-2002.D0			2.95			6
+2002.D0			3.05			6
 
 SP3 Orbital Angle (THEF)	SO Radius (m)
-0.1575D0			0.244D-9
+0.15707D0			0.254D-9
 
 Number of Channels Anode	Number of channels Cathode
 11				11
@@ -39,25 +39,25 @@ Anode Channel Width [m]		Anode Channel Height [m]	Anode Land Width [m]
 0.001D0				0.001D-11				0.001D0
 
 Cell width [m]			Anode Electrode Height [m]	Anode Bipolar plate backing thickness [m]
-0.023D0				0.000254D0			0.0005D0
+0.023D0				0.000254D0			0.0002D0
 
 Cathode Channel Width [m]	Cathode Channel Height [m]	Cathode Land Width [m]	
 0.0001D0			0.001D-11			0.001D0			
 
 Cell width [m]			Cathode Electrode Height[m]	Cathode Bipolar plate backing thickness [m]	
-0.023D0				0.000254D0			0.0001D0					
+0.023D0				0.000254D0			0.0005D0					
 
 MEA Length [m]			Cell Area [m^2]			Membrane Thickness
-0.023D0				0.01D0				25.4D-6
+0.025D0				0.01D0				25.4D-4
 
 Anode Elec Res. [Ohm-m]		Anode Bipolar Res. [Ohm-m]	
-5.53D-3				7.4D-3				
+5.53D-3				3.7D-3				
 
 Cathode Elec Res. [Ohm-m]	Cathode bipolar Res. [Ohm-m]
 5.53D-3				7.4D-3
 
 Elec.-osmotic drac coeff.	Darcy coeff [m^2]	Water diffusion membrane	
-7.D0				1.58D-18		1.28D-10			
+8.D1				1.58D-18		1.28D-13			
 
 Anode porosity		Cathode porosity	
 0.3D0			0.3D0			
