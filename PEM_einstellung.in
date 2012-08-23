@@ -1,6 +1,6 @@
 
 Data Output File Name:
-TMLW.dat
+TMMV.dat
 
 Resolution
 10000
@@ -24,13 +24,13 @@ Exc. Current Density Cat [A/cm^2]	Exc. Current Density An [A/cm^2]
 1.D-5					1.D-8
 
 Water Activity (1 for liquid)	Equiv. Mol. Weight	 
-0.9D0				900
+0.5D0				1100
 
 Dry Mem. Den. [kg/m^3]	Liquid Water Dipole [D]	Dimensionality [1,2,3]
 2002.D0			3.05			6
 
 SP3 Orbital Angle (THEF)	SO Radius (m)
-0.15707D0			0.254D-9
+0.25707D0			0.254D-9
 
 Number of Channels Anode	Number of channels Cathode
 11				11
@@ -45,19 +45,19 @@ Cathode Channel Width [m]	Cathode Channel Height [m]	Cathode Land Width [m]
 0.0001D0			0.001D-11			0.001D0			
 
 Cell width [m]			Cathode Electrode Height[m]	Cathode Bipolar plate backing thickness [m]	
-0.023D0				0.000254D0			0.0005D0					
+0.023D0				0.000254D0			0.0002D0					
 
 MEA Length [m]			Cell Area [m^2]			Membrane Thickness
-0.025D0				0.01D0				25.4D-4
+0.025D0				0.01D0				25.4D-6
 
 Anode Elec Res. [Ohm-m]		Anode Bipolar Res. [Ohm-m]	
-5.53D-3				3.7D-3				
+5.53D-3				7.4D-3				
 
 Cathode Elec Res. [Ohm-m]	Cathode bipolar Res. [Ohm-m]
 5.53D-3				7.4D-3
 
 Elec.-osmotic drac coeff.	Darcy coeff [m^2]	Water diffusion membrane	
-8.D1				1.58D-18		1.28D-13			
+7.D0				1.58D-18		1.28D-13			
 
 Anode porosity		Cathode porosity	
 0.3D0			0.3D0			
