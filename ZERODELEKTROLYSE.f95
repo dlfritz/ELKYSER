@@ -280,7 +280,7 @@
       !
       IMPLICIT NONE
       !
-      INTEGER :: J,K,RES,I
+      INTEGER :: J,K,RES,I,FILELEN,COMMLEN
       INTEGER, ALLOCATABLE :: N(:)
       DOUBLE PRECISION :: TK,TA,TZ,PK,PA,P0,DGS,DG,OCV,AA,AK,CD0A, &
                           CD0K,LAM,SIGM,CD,CUR,CSTP,ZCD,ND,KD,DW, &
@@ -296,6 +296,7 @@
       DOUBLE PRECISION, PARAMETER :: RGC=8.3144621D0
       DOUBLE PRECISION, PARAMETER :: F=96485.D0
       CHARACTER (LEN=100) :: TITEL
+      CHARACTER (LEN=100) :: COMMAND
       !
       ALLOCATE (Y(3,4,2))
       ALLOCATE (C(3,4,2))
@@ -751,6 +752,23 @@
 
       !
       !
+      FILELEN=LEN_TRIM(TITEL)
+      !COMMAND(1:5)='touch'
+      !COMMAND(6:6)=' '
+      !COMMAND(7:FILELEN+7)=TITEL
+      !COMMAND(FILELEN+4:FILELEN+7)='p  '
+      !COMMAND(FILELEN+8:100)=''
+      !CALL SYSTEM(COMMAND)
+      !COMMAND(1:5)='echo '
+      !COMMAND(6:63)='set terminal postscript font "Helvetica,20" enhanced >> ' 
+      COMMAND(64:64+FILELEN)=TITEL
+      COMMAND(FILELEN+61:FILELEN+64)='p  '
+      CALL SYSTEM(COMMAND)
+      !CALL SYSTEM()
+      COMMAND(1:21) ='./.elektroplotter.sh '
+      COMMAND(22:FILELEN+18)=TITEL(1:FILELEN-4)
+      COMMLEN=LEN_TRIM(COMMAND)
+      CALL SYSTEM(COMMAND(1:COMMLEN))
       CALL SYSTEM('mv *.dat Data')
       !
       ! 
