@@ -756,18 +756,6 @@
       !
       !
       FILELEN=LEN_TRIM(TITEL)
-      !COMMAND(1:5)='touch'
-      !COMMAND(6:6)=' '
-      !COMMAND(7:FILELEN+7)=TITEL
-      !COMMAND(FILELEN+4:FILELEN+7)='p  '
-      !COMMAND(FILELEN+8:100)=''
-      !CALL SYSTEM(COMMAND)
-      !COMMAND(1:5)='echo '
-      !COMMAND(6:63)='set terminal postscript font "Helvetica,20" enhanced >> ' 
-      COMMAND(64:64+FILELEN)=TITEL
-      COMMAND(FILELEN+61:FILELEN+64)='p  '
-      CALL SYSTEM(COMMAND)
-      !CALL SYSTEM()
       COMMAND(1:21) ='./.elektroplotter.sh '
       COMMAND(22:FILELEN+18)=TITEL(1:FILELEN-4)
       COMMLEN=LEN_TRIM(COMMAND)
@@ -1065,7 +1053,6 @@
       DOUBLE PRECISION, PARAMETER :: PI=4.D0*DATAN(1.D0)
       DOUBLE PRECISION, PARAMETER :: F=96485.D0
 
-      ACT=1.D0-ACT
       !
       ! Constant Parameters             !Units
       RW=0.141D-9                       ![m]
@@ -1095,12 +1082,12 @@
       CALL VISCOS(TZ,ETA)     
       !
       ! Characteristic Time Step
-      TAUC=(32.D0*PI**2*ETA*EPS0*EPSR*RW**3*DELTA**2)/(MUW*(QE))
+      TAUC=(32.D0*PI**2*ETA*EPS0*EPSR*RW**3*DELTA**2)/(MUW*(QE*2.D0))
       !
       ! Time for proton transfer to occur
       TAUGD=TAUC*DLOG(DTAN(THEI/2.D0)/DTAN(THEF/2.D0))
       !
-      TMAX=(1.D0/(4.D0*PI*EPSR*EPS0))*((MUW*QE)/(DELTA**2))
+      TMAX=(1.D0/(4.D0*PI*EPSR*EPS0))*((MUW*2.D0*QE)/(DELTA**2))
       !
       ! Diffusion Coefficient Ratio
       DELTAC=(DSQRT(2.D0)/LAM)*((EW/(RHOI/1000.D0))/M)**(2.D0/3.D0)
@@ -1110,8 +1097,8 @@
             EPSR*KB*TZ))*(LSUM/((RADF+RADI+LSUM)*(RADF+RADI))))*1.D4
       !
       ! Grotthuss Diffusion Coefficient
-      DGH=((((LG)**2*(MUW*3.336D-30)*QE)/(192.D0*PI**2*ETA*EPSR*EPS0* &
-          (RW)**3*(DELTA)**2)))/(DLOG(DTAN(THEI/2.D0)/ &
+      DGH=((((LG)**2*(MUW*3.336D-30)*2.D0*QE)/(192.D0*PI**2*ETA*EPSR* &
+          EPS0*(RW)**3*(DELTA)**2)))/(DLOG(DTAN(THEI/2.D0)/ &
           DTAN(THEF/2.D0)))*1.D4
       !
       ! En Masse Diffusion Coefficient
