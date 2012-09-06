@@ -46,7 +46,10 @@ gnuplot	$1.p
 
 # Create directory for output storage
 mkdir Figures/$1
+mkdir Data/$1
 
 # Move files to simulation directory
 mv *.p Figures/$1
 mv *.ps Figures/$1
+mv *.dat Data/$1
+cp PEM_einstellung.in Data/$1
