@@ -1023,6 +1023,8 @@
       !# LG     -> Distance between Oxygens in a proton hydrated mol-   #
       !#           ecule. [m]                                           #
       !#                                                                #
+      !# Z      -> Number of free electrons in the reaction.            #
+      !#                                                                #
       !# VCHEM  -> Number of chemical equilibrium steps in the overall  #
       !#           chemical reaction. [non-dim]                         #
       !#                                                                #
@@ -1048,7 +1050,8 @@
       DOUBLE PRECISION :: SIGM,GASC,EW,LAM,TZ,EPSI,RHOI,TAU,M,RW, &
                           DELTA,MUW,EPSR,EPS0,QE,KAPPA,TAUC,ETA,VW, &
                           THEF,THEI,TAUGD,TMAX,DELTAC,KB,H,RADI,RADF, &
-                          LSUM,LG,ACT,K1,K2,VCHEM,DSUMH,DGH,DWH,CSUMH,CH
+                          LSUM,LG,ACT,K1,K2,VCHEM,DSUMH,DGH,DWH,CSUMH, &
+                          CH,Z
       DOUBLE PRECISION, PARAMETER :: PI=4.D0*DATAN(1.D0)
       DOUBLE PRECISION, PARAMETER :: F=96485.D0
 
@@ -1069,6 +1072,7 @@
       K1=1000.D0                        ![non-dim]
       K2=200.D0                         ![non-dim]
       VCHEM=5.D0                        ![non-dim]
+      Z=2.D0                            ![Number]
       !
       ! Membrane porosity [non-dimensional]
       EPSI=LAM/(LAM+((EW/(RHOI/1000.D0))/M))
@@ -1081,12 +1085,12 @@
       CALL VISCOS(TZ,ETA)     
       !
       ! Characteristic Time Step
-      TAUC=(32.D0*PI**2*ETA*EPS0*EPSR*RW**3*DELTA**2)/(MUW*(QE*2.D0))
+      TAUC=(32.D0*PI**2*ETA*EPS0*EPSR*RW**3*DELTA**2)/(MUW*(QE*Z))
       !
       ! Time for proton transfer to occur
       TAUGD=TAUC*DLOG(DTAN(THEI/2.D0)/DTAN(THEF/2.D0))
       !
-      TMAX=(1.D0/(4.D0*PI*EPSR*EPS0))*((MUW*2.D0*QE)/(DELTA**2))
+      TMAX=(1.D0/(4.D0*PI*EPSR*EPS0))*((MUW*Z*QE)/(DELTA**2))
       !
       ! Diffusion Coefficient Ratio
       DELTAC=(DSQRT(2.D0)/LAM)*((EW/(RHOI/1000.D0))/M)**(2.D0/3.D0)
@@ -1096,7 +1100,7 @@
             EPSR*KB*TZ))*(LSUM/((RADF+RADI+LSUM)*(RADF+RADI))))*1.D4
       !
       ! Grotthuss Diffusion Coefficient
-      DGH=((((LG)**2*(MUW*3.336D-30)*2.D0*QE)/(192.D0*PI**2*ETA*EPSR* &
+      DGH=((((LG)**2*(MUW*3.336D-30)*Z*QE)/(192.D0*PI**2*ETA*EPSR* &
           EPS0*(RW)**3*(DELTA)**2)))/(DLOG(DTAN(THEI/2.D0)/ &
           DTAN(THEF/2.D0)))*1.D4
       !

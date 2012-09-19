@@ -1,11 +1,11 @@
 reset
 set terminal postscript font "Helvetica,20" enhanced
-set output "PEM_Elektrolyse_Pol.ps"
+set output "EKOLYSER.ps"
 set grid
 show grid
-set xlabel "Stromdichte (A/cm^2)" font "Helvetica,20"
-set ylabel "Zellspannung (V)" font "Helvetica,20"
+set xlabel "Current Density(A/cm^2)" font "Helvetica,20"
+set ylabel "Cell Voltage (V)" font "Helvetica,20"
 set xtics font "Helvetica,20"
 set ytics font "Helvetica, 20"
 set key left top
-plot "Data/onemm.dat" using 1:2 with lines lt 1 lw 5 lc -1 title "1 mm Channel", "Data/ponemm.dat" using 1:2 with lines lt 2 lw 5 lc 1 title "0.1 mm Channel"
+plot "../../Data/Initial_Data/ANOChannel.dat" using 1:2 with lines lt 1 lw 5 lc -1 title "No Flow-field Anode Side", "../../Data/Initial_Data/KT80.dat" using 1:2 with lines lt 2 lw 5 lc 1 title "Serpentine Flow-field"

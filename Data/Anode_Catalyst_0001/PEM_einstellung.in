@@ -1,6 +1,6 @@
 
 Data Output File Name:
-Anode_Catalyst_1.dat
+Anode_Catalyst_0001.dat
 
 Resolution
 10000
@@ -21,7 +21,7 @@ Trans. Coeff. A		Trans. Coeff. C
 2.D0			0.5D0			
 
 Exc. Current Density Cat [A/cm^2]	Exc. Current Density An [A/cm^2]
-1.D-5					1.D0
+1.D-5					1.D-4
 
 Water Activity (1 for liquid)	Equiv. Mol. Weight	 
 0.9D0				900
