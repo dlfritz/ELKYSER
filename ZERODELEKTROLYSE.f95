@@ -958,65 +958,30 @@
       !
       INTEGER :: L,O
       DOUBLE PRECISION :: TZ,CUR,CSTP,ECD0,VOLT,VOLTOLD
-      DOUBLE PRECISION, ALLOCATABLE :: P(:,:),IOA(:)
       DOUBLE PRECISION, PARAMETER :: RGC=8.3144621D0
       DOUBLE PRECISION, PARAMETER :: F=96485.D0
       !
-      ALLOCATE (P(3,5))
-      ALLOCATE (IOA(2))
-      !
-      !P(1,1) = 1641.4D0
-      !P(2,1) = -3649.1D0
-      !P(3,1) = 1760.4D0
-      !P(1,2) = 1741.4D0
-      !P(2,2) = -3916.8D0
-      !P(3,2) = 1947.6D0
-      !P(1,3) = 1606.0D0
-      !P(2,3) = -3325.1D0
-      !P(3,3) = 1399.5D0
-      !P(1,4) = 1089.1D0
-      !P(2,4) = -1569.3D0
-      !P(3,4) = -101.07D0
-      !P(1,5) = 1131.0D0
-      !P(2,5) = 1929.2D0
-      !P(3,5) = 353.41D0
 
-      P(1,1) = -1.5628D-7
-      P(2,1) = 0.000061746D0
-      P(3,1) = 1.526D0
-      P(1,2) = -1.4931D-7
-      P(2,2) = 0.0006023D0
-      P(3,2) = 1.5189D0
-      P(1,3) = -1.2448D-7
-      P(2,3) = 0.00056773D0
-      P(3,3) = 1.5123D0
-      P(1,4) = -9.1499D-8
-      P(2,4) = 0.00056773D0
-      P(3,4) = 1.507D0
-      P(1,5) = -1.2703D-7
-      P(2,5) = 0.00061454D0
-      P(3,5) = 1.5031D0
+      !
+
+
         
       SELECT CASE (L)
         CASE(10)
-          O=1
+          ECD0=TZ*2.003D-8
         CASE(15)
-          O=2
+          ECD0=TZ*1.9651D-8
         CASE(20)
-          O=3
+          ECD0=TZ*1.8817D-8
         CASE(25)
-          O=4
+          ECD0=TZ*1.9377D-8
         CASE(35)
-          O=5
+          ECD0=TZ*2.0893D-8
         CASE DEFAULT
-          O=1
+          ECD0=TZ*2.0893D-8
       END SELECT
 
-      IOA(2)=P(1,O)*CUR**2+P(2,O)*CUR+P(3,O)
-      IOA(1)=P(1,O)*(CUR-CSTP)**2+P(2,0)*(CUR-CSTP)+P(3,O)
 
-      !ECD0=(RGC*TZ/(2.D0*F))*(2.D0*P(1,O)*CUR+P(2,O))
-      ECD0=(RGC*TZ/(2.D0*F))*((DABS(IOA(2)-IOA(1)))/((DABS(VOLT-VOLTOLD))))
       !
       END SUBROUTINE EXCUDEN 
       !
