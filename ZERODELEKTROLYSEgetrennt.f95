@@ -126,8 +126,9 @@
       !# ETA(i,j) -> Parasitic losses from mass transport, electrode    #
       !#	   resistivity and activation energy [V]		#
       !#		i=1 -> Activation Voltage			#
-      !#		i=2 -> Ohmic Losses				#
+      !#		i=2 -> Membrane Losses				#
       !#		i=3 -> Mass Transport Losses			#
+      !#                i=4 -> Ohmic Losses                             #
       !#		----------------------------------------------	#
       !#		j=1 -> Anode Side/Membrane for Ohmic Losses	#
       !#		j=2 -> Cathode Side/Electrode for Ohmic Losses	#
@@ -284,14 +285,14 @@
       INTEGER, ALLOCATABLE :: N(:)
       DOUBLE PRECISION :: TK,TA,TZ,PK,PA,P0,DGS,DG,OCV,AA,AK,CD0A, &
                           CD0K,LAM,SIGM,CD,CUR,CSTP,ZCD,ND,KD,DW, &
-                          MU,E,HI,SI,EW,RHOI,SIGA,MUW,KAPPA,THEF, &
+                          MU,HI,SI,EW,RHOI,SIGA,MUW,KAPPA,THEF, &
                           RADF,ACT
       DOUBLE PRECISION, ALLOCATABLE :: AJ(:),BJ(:),CJ(:),DJ(:),TG(:), &
 				       H(:),S(:),C(:,:,:),Y(:,:,:), &
 				       ETA(:,:),D(:,:),R(:,:),MR(:,:), &
                                        CD0(:),MFR(:,:),M(:),DE(:,:), &
                                        DC(:),TC(:),PC(:),EP(:),EPP(:), &
-                                       FX(:,:),RHO(:),P(:)
+                                       FX(:,:),RHO(:),P(:),E(:)
       DOUBLE PRECISION, PARAMETER :: PI=4.D0*DATAN(1.D0)
       DOUBLE PRECISION, PARAMETER :: RGC=8.3144621D0
       DOUBLE PRECISION, PARAMETER :: F=96485.D0
@@ -301,7 +302,7 @@
       ALLOCATE (Y(3,4,2))
       ALLOCATE (C(3,4,2))
       ALLOCATE (MFR(9,3))
-      ALLOCATE (ETA(3,2))
+      ALLOCATE (ETA(4,2))
       ALLOCATE (MR(2,2))
       ALLOCATE (R(10,2))
       ALLOCATE (DE(2,2))
@@ -309,6 +310,7 @@
       ALLOCATE (EPP(2))
       ALLOCATE (RHO(2))
       ALLOCATE (D(9,2))
+      !ALLOCATE (E(2))
       ALLOCATE (CD0(2))
       ALLOCATE (EP(2))
       ALLOCATE (AJ(3))
@@ -319,6 +321,7 @@
       ALLOCATE (TG(3))
       ALLOCATE (TC(3))
       ALLOCATE (PC(3))
+      ALLOCATE (E(4))
       ALLOCATE (H(3))
       ALLOCATE (M(3))
       ALLOCATE (N(2))
@@ -527,7 +530,6 @@
       !
       ! Open Circuit Voltage
       OCV=-DG/(2*F)
-      
       !
       !
       !##################################################################
@@ -733,10 +735,6 @@
       P(2)=Y(2,4,2)*PK
       P(3)=Y(3,4,1)*PA
       !
-      ! Open Circuit Voltage (zhang2006a)
-      OCV=(1.229D0-0.000846D0*(TZ-298.15D0))+((RGC*TA/(2.D0*F))* &
-          DLOG(P(3)*(Y(3,4,1))**4)-((RGC*TK/(4.D0*F))*DLOG(P(2)* &
-          (Y(2,4,2))**2)))
       ! Mass transport losses
       ETA(3,1)=((RGC*TA)/(4.D0*F))*DLOG(C(3,4,1)/C(3,1,1))
       ETA(3,2)=((RGC*TK)/(2.D0*F))*DLOG(C(2,4,2)/C(2,1,2))
@@ -749,11 +747,16 @@
       ETA(2,1)=D(9,2)*ZCD/(D(8,2)*SIGM)
       !
       ! Ohmic losses through the electrode
-      ETA(2,2)=(R(1,1)+R(1,2))*ZCD
+      ETA(4,1)=R(1,1)*ZCD*60.D0
+      ETA(4,2)=R(1,2)*ZCD*60.D0
       !
-      E=OCV+ETA(1,1)+ETA(1,2)+ETA(2,1)+ETA(2,2)+ETA(3,2)+ETA(3,1)
+      
+      E(1)=OCV+ETA(4,2)+ETA(4,1)
+      E(2)=OCV+ETA(4,2)+ETA(4,1)+ETA(1,2)
+      E(3)=OCV+ETA(4,2)+ETA(4,1)+ETA(1,2)+ETA(1,2)*1.3D0
+      E(4)=OCV+ETA(1,1)+ETA(1,2)+ETA(2,1)+ETA(4,1)+ETA(4,2)+ETA(3,2)+ETA(3,1)
       OPEN(UNIT=20,FILE=TITEL,ACCESS='APPEND')
-       WRITE(20,*) ZCD, E, MFR(1,2),MFR(1,1),P(1),P(2),P(3)
+       WRITE(20,*) ZCD, E(4), MFR(1,2),MFR(1,1),E(1),E(2),E(3),OCV
       CLOSE(20)
       END DO
       !

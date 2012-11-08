@@ -1,6 +1,6 @@
 
 Data Output File Name:
-Test.dat
+Getrennt.dat
 
 Resolution
 10000
@@ -9,7 +9,7 @@ Initial Concentrations  Water		Hydrogen	Oxygen
 			0.92D0		0.0866D0	0.0322D0	
 
 Current Density [A/cm^2]
-6.D0
+1.D0
 
 Cathode Temp. [K]	Anode Temp. [k]		Cell Temp. [K]
 306.D0			303.D0			300.D0
@@ -21,7 +21,7 @@ Trans. Coeff. A		Trans. Coeff. C
 2.D0			0.5D0			
 
 Exc. Current Density Cat [A/cm^2]	Exc. Current Density An [A/cm^2]
-1.0D-5					1.0D-9
+0.75D-4					0.75D0
 
 Water Activity (1 for liquid)	Equiv. Mol. Weight	 
 0.9D0				900
